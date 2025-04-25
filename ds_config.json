@@ -1,0 +1,18 @@
+{
+  // per-GPU micro-batch size; global train_batch_size = 2 * 32 * 1 = 64
+  "train_micro_batch_size_per_gpu": 2,
+  "gradient_accumulation_steps": 1,
+  "train_batch_size": 64,
+
+  "optimizer": {
+    "type": "AdamW",
+    "params": { "lr": 5e-5, "betas": [0.9, 0.98], "eps": 1e-8 }
+  },
+  "fp16": { "enabled": true },
+  "zero_optimization": { "stage": 1 },
+
+  // Enable AutoTP: shard weights across 8 GPUs per node
+  "tensor_parallel": {
+    "autotp_size": 8
+  }
+}
