@@ -1,11 +1,17 @@
 #!/bin/bash
-#SBATCH --job-name=autotp_test
+#SBATCH -A BIF148                 # embedding life project
+#SBATCH -J autotp_test            # Job name
+#SBATCH -o %x-%j.out              # Output file name (%x=job name, %j=job id)
+#SBATCH -e %x-%j.err              # Error file name
+#SBATCH -t 01:00:00               # Maximum job time (HH:MM:SS)
+#SBATCH -p batch                  # batch queue
+#SBATCH -q debug                  # debugging QOS
 #SBATCH --nodes=4                      # 4 Frontier nodes
 #SBATCH --ntasks-per-node=1            # 1 launcher per node
 #SBATCH --gpus-per-node=8              # 8 GPUs (MI250X) per node
 #SBATCH --cpus-per-task=7              # CPU cores for data loading
 #SBATCH --time=01:00:00
-#SBATCH --partition=standard
+#SBATCH --exclusive               # Request exclusive access to node
 
 module load rocm
 module load deepspeed/0.16.8
