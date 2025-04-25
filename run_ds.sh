@@ -14,7 +14,6 @@
 #SBATCH --exclusive               # Request exclusive access to node
 
 module load rocm
-module load deepspeed/0.16.8
 
 export OMP_NUM_THREADS=7
 
@@ -24,6 +23,12 @@ export MASTER_PORT=29500
 
 # Build hostfile for DeepSpeed launcher
 scontrol show hostnames $SLURM_JOB_NODELIST | awk '{print $1" slots=8"}' > hostfile
+
+# Set up micromamba environment
+export MAMBA_EXE='/autofs/nccs-svm1_home1/erikgarrison/.local/bin/micromamba'
+export MAMBA_ROOT_PREFIX='/lustre/orion/scratch/erikgarrison/bif148/micromamba'
+eval "$("$MAMBA_EXE" shell hook --shell bash --root-prefix "$MAMBA_ROOT_PREFIX" 2> /dev/null)"
+micromamba activate gruboros
 
 # Launch with DeepSpeed CLI (auto sets up TP size=8 & DP across 4 nodes)
 srun --gpu-bind=closest deepspeed \
